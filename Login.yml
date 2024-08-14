@@ -1,0 +1,29 @@
+config:
+  #target: 'https://core.dev.appservice.draiver.net'
+  target: 'http://localhost:8080'
+  processor: './saveToken.js'
+  http:
+    timeout: 300
+    arrivalCount: 1
+  defaults:
+    headers:
+      content-type: "application/json"
+      accept: "application/json"
+  phases: 
+    - duration: 1
+      arrivalRate: 1
+      name: login
+
+scenarios:
+  - flow:         
+      - log: Login expect 200
+      - post:
+          url: "/authenticate"
+          json:
+            username: 'martin.huber@driverdo.com.dev'
+            password: 'driverdo734'
+          capture:
+            - json: $.token
+              as: token
+          afterResponse: "captureResponse"  
+      - log: "Token saved: {{ token }}"

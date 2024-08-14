@@ -1,0 +1,83 @@
+config:
+  variables:
+    customMessage: "Action Update Unauthorized"
+  #target: 'https://core.dev.appservice.draiver.net'
+  target: 'http://localhost:8080'
+  processor: "./processor.js"
+  http:
+    timeout: 30 # Responses have to be sent within 30 seconds or the request will be aborted
+    arrivalCount: 1
+  defaults:
+        headers:
+            content-type: "application/json"
+            accept: "application/json"
+  payload:  
+    path: "./tokens.csv"
+    fields: 
+      - "token"
+
+  environments:
+        dev:
+            phases: 
+           
+                - duration: 25 
+                  arrivalRate: 1 
+                  name: "login"
+scenarios:
+      - flow:
+        - log: "token :{{token}}"  
+        - patch:
+              url: "/action"   
+              headers:
+                authorization: "{{ token }}" 
+              json:       
+                - referenceId: "Reference Address"
+                  externalIdentifier: "Optional non-unique string"
+                  quoteId: "Optional provided id from Create Quote"
+                  actionType: "MOVE_VEHICLES"
+                  pickup:
+                    point:
+                      mapPointType: "ADDRESS"
+                      street1: "60 Springview Place"
+                      street2: null
+                      city: "Newnan"
+                      state: "GA"
+                      postalCode: "30265"
+                    windowUTC:
+                      start: "2024-10-27T08:19:13Z"
+                      end: "2024-10-27T14:19:13Z"
+                    tasks:
+                      - taskType: "TO_DO"
+                        note: "JASON-{{$randomNumber(5000000000,5000576786)}}"
+                        noteMimeType: "TEXT_PLAIN"
+                  dropoff:
+                    point:
+                      mapPointType: "ADDRESS"
+                      street1: "185 GA-16"
+                      street2: null
+                      city: "Newnan"
+                      state: "GA"
+                      postalCode: "30263"
+                    windowUTC:
+                      start: "2024-10-27T12:19:13Z"
+                      end: "2024-10-27T20:19:13Z"
+                    tasks:
+                      - taskType: "TO_DO"
+                        note: "HOLA-{$randomNumber(5000000000,5000576786)}}"
+                        noteMimeType: "TEXT_PLAIN"
+                  vehicle:
+                    year: 2014
+                    make: "CHEVROLET"
+                    model: "Cruze"
+                  reason:
+                    category: "RETAIL"
+                    label: "Your label"
+                  notes:
+                    - noteType: "GENERAL"
+                      message: "new notes"
+                    - noteType: "PICKUP_INSTRUCTIONS"
+                      message: "Use the second door"
+                    - noteType: "DROPOFF_INSTRUCTIONS"
+                      message: "leave keys in drop box"         
+        afterResponse: "captureResponse"
+        beforeRequest: "logRequestBody"        

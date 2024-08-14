@@ -1,0 +1,160 @@
+config:
+  variables:
+    customMessage: Proxy webhook Success    
+  #target: 'https://core.dev.appservice.draiver.net'
+  target: 'http://localhost:8080'
+  processor: "./processor.js"
+  http:
+    timeout: 60 # Responses have to be sent within 30 seconds or the request will be aborted
+    arrivalCount: 1
+  defaults:
+        headers:
+            content-type: "application/json"
+            accept: "application/json"
+  phases: 
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 10
+      name: Warm up
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 10
+      name: Ramp up load
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 30
+      name: Spike phase
+scenarios:
+      - flow:
+        - log: Executing > Proxy webhook Success
+        - post:
+              url: "/webhooks/inbound"   
+              headers:
+                authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJjYWNoZUtleSI6ImFwaS10b2tlbioqYmlnLmpheUBkcml2ZXJkby5jb20qKkRyYWl2ZXIgQ09SRSoqR0liM0QydnlTZ0dKUkgyUW1UNEtvdyIsInRva2VuSWQiOiJ1dFVOeWZsR1ExYUpCY3RrUksyYk5nIiwic3ViIjoiYmlnLmpheUBkcml2ZXJkby5jb20iLCJpYXQiOjE3MTE1NjQxODIsImV4cCI6MjAyNzA5NjkxMX0.1o7iRa1pmE-YQEefC_4QH1BHAHqGzGsUZcjqLEVvGzusaxbvqhTHMi1cFNN_3VGO" 
+              json:       
+                type: vehicleTransferOrder.updated
+                created: 1713968019722
+                object:
+                  id: 27caf2d6-0ffd-47e0-9a0f-89b1781aad96
+                  orderId: e034bc96-bb3d-4093-b1c7-e64ea28314c8
+                  transportationOrderId: 3bae430a-773a-4dc5-b883-8304ea631ed6
+                  referenceNumber: V-047165323
+                  directions:
+                    pickup:
+                      name: HJS Auctions
+                      type: BUSINESS
+                      address: '2401 S 15th Ave, Phoenix, AZ 85007, USA'
+                      addressComponents:
+                        streetNumber: '2401'
+                        street: S 15th Ave
+                        city: Phoenix
+                        county: Maricopa County
+                        state: AZ
+                        country: US
+                        postalCode: '85007'
+                        timeZone:
+                          id: America/Phoenix
+                          displayNameLong: Mountain Standard Time
+                          displayNameShort: MST
+                          offset: '-07:00'
+                          offsetShorthand: '-0700'
+                      geolocation:
+                        type: Point
+                        coordinates:
+                          - -112.0908311
+                          - 33.4254916
+                      windows:
+                        - priority: 0
+                          start: 1652659200000
+                          end: 1652659200000
+                      notes: Go arround the building!
+                    dropoff:
+                      name: ABS Auto Auctions
+                      type: BUSINESS
+                      address: '69 N Elm St #2, St Albans City, VT 05478, USA'
+                      addressComponents:
+                        streetNumber: '69'
+                        street: N Elm St
+                        city: St Albans City
+                        county: Franklin County
+                        state: VT
+                        country: US
+                        postalCode: 05478
+                        timeZone:
+                          id: America/New_York
+                          displayNameLong: Eastern Standard Time
+                          displayNameShort: EST
+                          offset: '-04:00'
+                          offsetShorthand: '-0400'
+                      geolocation:
+                        type: Point
+                        coordinates:
+                          - -73.0910071
+                          - 44.815908
+                      notes: Wait in front of the gate. We will come out and meet you.
+                    distance:
+                      distanceInMeters: 4175826
+                      distanceInMiles: 2594.737980195657
+                      durationInSeconds: 141619
+                    route:
+                      type: LineString
+                      coordinates:
+                        - - -112.09112
+                          - 33.425200000000004
+                  fare:
+                    amount: 685.6
+                    name: Platinum
+                    price: 0
+                    items: []
+                    type: STANDARD
+                  vehicle:
+                    type: Car
+                    year: 1997
+                    make: Acura
+                    model: CL
+                    stockNumber: A1231
+                    isOverSized: false
+                    isOperational: true
+                    notes: This is a test.
+                    odometer: 12310
+                    vehicleMeasurements:
+                      height: 54.7
+                      length: 190
+                      width: 70.1
+                      curbWeight: 3219
+                      grossVehicleWeightRating: null
+                      grossVehicleWeightRangeMin: null
+                      grossVehicleWeightRangeMax: null
+                      tonnage: null
+                    vehicleMarket: LIGHT
+                    vin: 19UYA2250VL009163
+                  status: PROVIDED_ETA_DROPOFF
+                  payer:
+                    id: 98565eb6-c758-4300-a6e0-c5f596f4fa70
+                    name: SE Test
+                    type: SHIPPER
+                  owner:
+                    id: 98565eb6-c758-4300-a6e0-c5f596f4fa70
+                    name: SE Test
+                    type: SHIPPER
+                  created:
+                    date: 1713968016869
+                    byUser: martin.huber@driverdo.com
+                    byUserFullName: Martin Huber
+                    byCompany:
+                      id: e640a70a-be29-4f46-a8a4-bf941eab0d1a
+                      name: Draiver
+                      type: SHIPPER
+                    origin: api-token a2a5d5bd-c47f-4935-85cd-bc533b9f518f
+                  reconciliationCode: Lot to Lot
+                  canCancel: true
+                  vinlessOrder: false
+                  preVinOrder: false
+                  timeline:
+                    - name: AVAILABLE
+                      dateTime: 1713968019409
+                  notes: TPO Tests
+                  labels:
+                    organizationId: EexOOni8f_e8yQK0AD5BeQ
+                    actionId: a1ONq000000euOTMAY
+                    accountId: 0018K000008HOZ9QAO

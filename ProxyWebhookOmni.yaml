@@ -1,0 +1,31 @@
+config:
+  variables:
+    customMessage: Proxy webhook Success    
+  #target: 'https://core.dev.appservice.draiver.net'
+  target: 'http://localhost:8080'
+  processor: "./processor.js"
+  http:
+    timeout: 10 # Responses have to be sent within 30 seconds or the request will be aborted
+    arrivalCount: 10
+  defaults:
+        headers:
+            content-type: "application/xml"
+            accept: "application/json"
+  phases: 
+    - duration: 300
+      arrivalRate: 1
+      rampTo: 5
+      name: Ramp up load
+    - duration: 300
+      arrivalRate: 8
+      rampTo: 15
+      name: Spike phase
+scenarios:
+      - flow:
+        - log: Executing > Proxy omnisearch Success
+        - post:
+              url: "/webhooks/omnisearch"   
+              headers:
+                authorization: "Bearer eyJhbGciOiJIUzM4NCJ9.eyJjYWNoZUtleSI6ImFwaS10b2tlbioqYmlnLmpheUBkcml2ZXJkby5jb20qKkRyYWl2ZXIgQ09SRSoqR0liM0QydnlTZ0dKUkgyUW1UNEtvdyIsInRva2VuSWQiOiJ1dFVOeWZsR1ExYUpCY3RrUksyYk5nIiwic3ViIjoiYmlnLmpheUBkcml2ZXJkby5jb20iLCJpYXQiOjE3MTE1NjQxODIsImV4cCI6MjAyNzA5NjkxMX0.1o7iRa1pmE-YQEefC_4QH1BHAHqGzGsUZcjqLEVvGzusaxbvqhTHMi1cFNN_3VGO" 
+              body: '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header><wsse:Security soapenv:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"><wsse:UsernameToken><wsse:Username>reyrey</wsse:Username><wsse:Password>4Tks$e+NkuMy@&lt;XD</wsse:Password></wsse:UsernameToken></wsse:Security><payloadManifest xmlns="http://www.starstandards.org/webservices/2005/10/transport"><manifest contentID="Content0" namespaceURI="http://www.starstandards.org/STAR" element="rey_DRAIVERVehicleInventory" /></payloadManifest></soapenv:Header><soapenv:Body><PutMessage xmlns="http://www.starstandards.org/webservices/2005/10/transport"><payload><content id="Content0"><rey_DRAIVERVehicleInventory xsi:noNamespaceSchemaLocation="rey_DRAIVERVehicleInventory.xsd" xmlns="http://www.starstandards.org/STAR"><ApplicationArea><Sender><Component>ERA</Component><Task>VI</Task><DealerNumber>781611959451075</DealerNumber><StoreNumber>01</StoreNumber><AreaNumber>01</AreaNumber></Sender><CreationDateTime>2024-08-13T11:42:03.213</CreationDateTime><BODId>b7802228-e684-467b-a258-318d496a92c4</BODId><Destination><DestinationNameCode>RCI</DestinationNameCode></Destination></ApplicationArea><VehInvRec BranchNo="01" TransType="I" StoreNo="01"><Vehicle VehicleYr="24" ExtClrCode="8X8" MakePfx="TO" ExtClrDesc="BLUPRINT" Vin="5TFMA5DB2RX191061" ModelDesc="4WD CREW 1794 ED 5.5" VehicleMake="TOYOTA" Carline="TUNDRA 4X4" IntClrCode="LB44" IntClrDesc="SADDLE TAN LTH" MdlNo="8376"><VehicleDetail UnitsofMeasure="E" EngineConfig="IFV" EngNo="IFV" NewUsed="N" Bodysize="PICKUP" /><Option FactAccCode="D5" FactAccDesc="DOOR EDGE GUARDS" /><Option FactAccCode="FE" FactAccDesc="50 STATE EMISSIONS" /><Option FactAccCode="HU" FactAccDesc="HD UP DISP (HUD)" /><Option FactAccCode="LB" FactAccDesc="NON-SKID SPRAY-ON BED LNR (TMS" /><Option FactAccCode="SO" FactAccDesc="OFFRD FRT SKID PL" /><Option FactAccCode="R8" FactAccDesc="BLK DUAL-STEP RUN BOARD (TMS)" /><Option FactAccCode="5A" FactAccDesc="TRI-FOLD TONNEAU CVR (TMS)" /><OptionPackage PkgCodeDesc="CHRM PLD PWR FLD OS MIRS" PkgCode="MJ"><OptionAccounting Rtl="0.00" Amt="0.00" /><OptionDescLines Description="BLIND SPOT MONTR" /><OptionDescLines Description="MULTI-TERR BCK MONTR" /><OptionDescLines Description="PANORAMIC VIEW BCK MONTR" /></OptionPackage><OptionPackage PkgCodeDesc="TRD OFF-RD PKG" PkgCode="OF"><OptionAccounting Rtl="0.00" Amt="0.00" /><OptionDescLines Description="FRT/RR MUD GUARDS" /><OptionDescLines Description="MULTI-TERR BCK MONTR" /><OptionDescLines Description="WHLS: 20&quot; BLK ALLOY" /></OptionPackage></Vehicle><StockingInfo StatCode="1" StatDesc="IN-STOCK" RcptDate="08/12/2024" AcctgMake="TO" Id="RX191061" VehicleType="T" /><MiscInfo /><OrderInfo MfrStat="G" FactOrdNo="RX16I385" OrdType="S" /><PriceCost HbkAmt="0.00" ListPrice="72744.00" SlsCost="68080.19" InvenGlAmt="68201.99" CostPackAmt="0.00" InternetPrice="0.00" /></VehInvRec></rey_DRAIVERVehicleInventory></content></payload></PutMessage></soapenv:Body></soapenv:Envelope>'   
+        - log: Executed
